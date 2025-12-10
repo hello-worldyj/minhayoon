@@ -1,51 +1,60 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>민하윤</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>요약 생성기</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="wrap">
 
-    <h1> 책 요약 생성기</h1>
+<div class="wrap">
 
+  <h1>책 요약 생성기</h1>
+
+  <div class="row">
     <label>책 제목</label>
-    <input id="title" type="text" />
+    <input id="title" placeholder="예: 해리포터" />
+  </div>
 
+  <div class="row">
     <label>작가</label>
-    <input id="author" type="text" />
+    <input id="author" placeholder="예: J.K. 롤링" />
+  </div>
 
+  <div class="row">
+    <label>말투</label>
+    <select id="tone">
+      <option value="보통">보통</option>
+      <option value="짝사랑하는 사람에게 말하듯">짝사랑하는 사람에게 말하듯</option>
+      <option value="친구한테 말하듯">친구한테 말하듯</option>
+    </select>
+  </div>
+
+  <div class="row">
     <label>언어</label>
     <select id="lang">
       <option value="한국어">한국어</option>
       <option value="영어">영어</option>
     </select>
-
-    <label>톤</label>
-    <select id="tone">
-      <option value="normal">정상</option>
-      <option value="love">하윤이가 짝사랑한테 하는 말투</option>
-      <option value="friend">하윤이가 친구한테 하는 말투</option>
-    </select>
-
-    <label>요약 문장 수</label>
-    <input id="num" type="number" min="1" max="100" value="15" />
-
-    <button onclick="generate()">생성하기</button>
-
-    <h3>책 설명</h3>
-    <pre id="intro"></pre>
-
-    <h3>요약</h3>
-    <pre id="summary"></pre>
-
-    <button onclick="copyText('intro')">설명 복사</button>
-    <button onclick="copyText('summary')">요약 복사</button>
-
   </div>
 
-  <script src="script.js"></script>
+  <div class="row">
+    <label>문단 수</label>
+    <input id="num" value="3" type="number" min="1" max="10" />
+  </div>
+
+  <button onclick="generate()">요약 만들기</button>
+
+  <h2>책 설명</h2>
+  <pre id="intro"></pre>
+  <button onclick="copyText('intro')">복사</button>
+
+  <h2>요약</h2>
+  <pre id="summary"></pre>
+  <button onclick="copyText('summary')">복사</button>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
