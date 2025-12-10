@@ -1,20 +1,23 @@
-const API_BOOK = "/api/book";
-const API_SUMMARY = "/api/summary";
+const API_BOOK = "/book";
+const API_SUMMARY = "/summary";
 
 async function generate() {
-  const title = titleInput.value.trim();
-  const author = authorInput.value.trim();
-  const lang = langInput.value;
-  const tone = toneInput.value;
-  const num = numInput.value;
+  const title = document.getElementById("title").value.trim();
+  const author = document.getElementById("author").value.trim();
+  const tone = document.getElementById("tone").value;
+  const lang = document.getElementById("lang").value;
+  const num = document.getElementById("num").value;
+
+  const intro = document.getElementById("intro");
+  const summary = document.getElementById("summary");
 
   if (!title) return alert("책 제목을 입력해주세요!");
 
-  intro.innerText = "불러오는 중...";
+  intro.innerText = "책 정보 불러오는 중…";
   summary.innerText = "";
 
   try {
-    // 📌 1) 책 설명 요청
+    // 📘 책 설명 요청
     const bookRes = await fetch(API_BOOK, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -22,18 +25,18 @@ async function generate() {
     });
 
     const bookData = await bookRes.json();
-    const desc = bookData.description;
+    const desc = bookData.description || "";
 
-    // ❗ 설명 없으면 여기서 STOP
+    // 설명 없음 → STOP
     if (!desc) {
-      intro.innerText = "설명이 없어요!";
-      summary.innerText = "책 설명이 없어서 요약을 만들 수 없어요.";
-      return; // ← OpenAI 호출 절대 안함
+      intro.innerText = "책 설명이 없어요!";
+      summary.innerText = "설명이 없어서 요약을 만들 수 없어요.";
+      return;
     }
 
     intro.innerText = desc;
 
-    // 📌 2) 요약 생성
+    // ✏️ 요약 생성
     const sumRes = await fetch(API_SUMMARY, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -51,7 +54,12 @@ async function generate() {
     summary.innerText = sumData.summary;
 
   } catch (e) {
-    intro.innerText = "설명을 불러오지 못했어요.";
-    summary.innerText = "요약 생성 실패.";
+    intro.innerText = "문제가 발생했어요!";
   }
+}
+
+// 복사
+function copyText(id) {
+  const t = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(t);
 }
