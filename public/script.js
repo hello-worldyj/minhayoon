@@ -23,8 +23,8 @@ async function generate() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ title, author })
     });
-    const introData = await introRes.json();
 
+    const introData = await introRes.json();
     const intro = introData.description || '설명이 없습니다.';
     document.getElementById('intro').innerText = intro;
 
@@ -41,15 +41,15 @@ async function generate() {
         num
       })
     });
-    const sumData = await sumRes.json();
 
+    const sumData = await sumRes.json();
     document.getElementById('summary').innerText = sumData.summary || '요약 생성 실패';
 
   } catch (error) {
     document.getElementById('intro').innerText = '책 정보를 불러오는 데 실패했습니다.';
     document.getElementById('summary').innerText = '요약 생성 중 오류가 발생했습니다.';
     console.error(error);
-    alert('오류가 발생했습니다. 콘솔을 확인해주세요.');
+    alert('에러가 발생했습니다. 콘솔을 확인해주세요.');
   }
 }
 
