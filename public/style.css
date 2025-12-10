@@ -1,63 +1,106 @@
+/* 전체 배경 */
 body {
-  font-family: "Noto Sans KR", Arial, sans-serif;
-  padding: 20px;
-  background: #f0f2f5;
+  font-family: "Noto Sans KR", sans-serif;
+  background: linear-gradient(135deg, #dfe9f3, #ffffff);
+  margin: 0;
+  padding: 30px;
 }
 
+/* 카드 스타일 */
 .container {
   max-width: 650px;
   margin: auto;
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  background: #ffffffee;
+  backdrop-filter: blur(6px);
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  animation: fadeIn 0.5s ease;
 }
 
+/* 부드러운 등장 애니메이션 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 제목 */
 h1 {
   text-align: center;
-  font-size: 26px;
-  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #2b2b2b;
 }
 
+/* 라벨 */
 label {
-  font-weight: bold;
-  margin-top: 10px;
   display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
 }
 
+/* 입력창 공통 */
 input, select {
   width: 100%;
-  padding: 10px;
-  margin: 6px 0 12px 0;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 18px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
   font-size: 15px;
+  background: #fafafa;
+  transition: all 0.2s ease;
 }
 
+/* 포커스 시 */
+input:focus, select:focus {
+  border-color: #7ca9ff;
+  background: #fff;
+  box-shadow: 0 0 5px rgba(124, 169, 255, 0.5);
+  outline: none;
+}
+
+/* 버튼 */
 button {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   margin-top: 10px;
-  cursor: pointer;
-  background: #0066ff;
-  color: white;
+  background: #7b9bff;
   border: none;
+  color: #fff;
   font-weight: bold;
-  border-radius: 6px;
-  transition: 0.15s;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.2s;
+  box-shadow: 0 4px 10px rgba(123,155,255,0.3);
 }
 
 button:hover {
-  background: #004fcc;
+  background: #567dff;
+  transform: translateY(-2px);
 }
 
+/* 텍스트 박스 */
 .box {
-  background: #f5f5f5;
-  padding: 12px;
-  border-radius: 6px;
-  min-height: 120px;
-  margin-bottom: 10px;
+  background: #f3f6ff;
+  border: 1px solid #d6dfff;
+  padding: 15px;
+  border-radius: 12px;
+  min-height: 130px;
+  margin-bottom: 15px;
   white-space: pre-wrap;
-  line-height: 1.5;
-  border: 1px solid #ddd;
+  line-height: 1.6;
+  color: #333;
+  font-size: 15px;
+  box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+}
+
+/* 소제목 */
+h3 {
+  margin-top: 25px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #3b3b3b;
 }
