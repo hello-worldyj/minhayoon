@@ -1,55 +1,60 @@
 :root {
-  --teal: #14b8a6;      /* transformative teal */
-  --teal-dark: #0d9488;
+  --teal: #14b8a6;
+  --teal-dark: #0f766e;
+  --bg: #f9fafb;
+  --text: #111;
 }
 
 body {
-  font-family: 'Pretendard', Arial, sans-serif;
-  background: #f0fdfa;
-  padding: 20px;
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
 }
 
-.container {
-  max-width: 600px;
-  margin: auto;
+.wrap {
+  width: 100%;
+  max-width: 450px;
   background: white;
-  padding: 24px;
+  padding: 30px;
   border-radius: 14px;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
 
 h1 {
-  color: var(--teal);
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  color: var(--teal-dark);
 }
 
 label {
+  font-size: 14px;
   font-weight: 600;
   margin-top: 12px;
   display: block;
 }
 
-input,
-select {
+input, select {
   width: 100%;
   padding: 10px;
-  margin-top: 5px;
   border-radius: 8px;
-  border: 1px solid #d1d5db;
+  border: 1px solid #ddd;
+  margin-top: 6px;
 }
 
 button {
   width: 100%;
-  margin-top: 12px;
+  margin-top: 18px;
   padding: 12px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
   background: var(--teal);
   color: white;
-  font-weight: 700;
+  border: none;
+  border-radius: 8px;
   font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 button:hover {
@@ -57,9 +62,10 @@ button:hover {
 }
 
 pre {
-  background: #ecfeff;
-  padding: 14px;
-  border-radius: 8px;
+  background: #eefcfb;
+  border-left: 4px solid var(--teal);
+  padding: 12px;
+  border-radius: 6px;
+  margin-top: 10px;
   white-space: pre-wrap;
-  border: 1px solid #cffafe;
 }
