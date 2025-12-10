@@ -2,53 +2,42 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>책 요약 생성기</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <div class="container">
-    <header class="top">
-      <!-- 아바타: public/avatar.jpg 파일을 사용 -->
-      <div class="avatar-wrap">
-        <img src="avatar.jpg" alt="프로필 사진" class="avatar" />
-      </div>
-      <h1 class="title">책 요약 생성기</h1>
-    </header>
 
-    <main>
-      <label for="title">책 제목</label>
-      <input type="text" id="title" placeholder="예: 차예준" />
+    <!-- 👇 네 얼굴 아이콘 (제목 위) -->
+    <div class="avatar-wrapper">
+      <img src="/avatar.jpg" alt="profile" class="avatar" />
+    </div>
 
-      <label for="author">작가</label>
-      <input type="text" id="author" placeholder="예: 민하윤" />
+    <h1>책 요약 생성기</h1>
 
-      <label for="lang">출력 언어</label>
-      <select id="lang">
-        <option value="한국어">한국어</option>
-        <option value="영어">영어</option>
-      </select>
+    <textarea id="bookContent" placeholder="책 내용을 입력하세요..."></textarea>
 
-      <label for="tone">말투</label>
-      <select id="tone">
-        <option value="부드러운">부드러운 말투</option>
-        <option value="딱딱한">하윤이가 항상 하는 말투</option>
-        <option value="기본">기본 말투</option>
-      </select>
+    <label>글 분위기 선택</label>
+    <select id="tone">
+      <option value="친근한">친근한</option>
+      <option value="격식 있는">격식 있는</option>
+      <option value="중립적인">중립적인</option>
+    </select>
 
-      <label for="num">문장 수</label>
-      <input type="number" id="num" min="1" max="10" value="3" />
+    <label>문체 선택</label>
+    <select id="style">
+      <option value="작가 스타일">작가 스타일</option>
+      <option value="설명하는 스타일">설명하는 스타일</option>
+      <option value="대화체">대화체</option>
+    </select>
 
-      <button onclick="generate()">요약 만들기</button>
+    <button id="generateBtn">요약 만들기</button>
 
-      <h3>책 설명</h3>
-      <pre id="intro" class="box"></pre>
-      <button onclick="copyText('intro')" class="small-btn">책 설명 복사</button>
+    <h2>요약 결과</h2>
+    <div id="result"></div>
 
-      <h3>요약 결과</h3>
-      <pre id="summary" class="box"></pre>
-      <button onclick="copyText('summary')" class="small-btn">요약 복사</button>
-    </main>
   </div>
 
   <script src="script.js"></script>
