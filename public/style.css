@@ -1,7 +1,7 @@
 /* 전체 배경 */
 body {
   font-family: "Noto Sans KR", sans-serif;
-  background: linear-gradient(135deg, #dfe9f3, #ffffff);
+  background: linear-gradient(135deg, #dce3ff, #ffffff);
   margin: 0;
   padding: 30px;
 }
@@ -10,7 +10,7 @@ body {
 .container {
   max-width: 650px;
   margin: auto;
-  background: #ffffffee;
+  background: #ffffffdd;
   backdrop-filter: blur(6px);
   padding: 30px;
   border-radius: 18px;
@@ -18,7 +18,7 @@ body {
   animation: fadeIn 0.5s ease;
 }
 
-/* 부드러운 등장 애니메이션 */
+/* 부드러운 등장 */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -27,37 +27,34 @@ body {
 /* 제목 */
 h1 {
   text-align: center;
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 27px;
   margin-bottom: 25px;
-  color: #2b2b2b;
+  color: #2c2c2c;
 }
 
 /* 라벨 */
 label {
-  display: block;
-  margin-bottom: 6px;
   font-weight: 600;
-  color: #333;
+  margin-bottom: 5px;
+  display: block;
 }
 
-/* 입력창 공통 */
+/* 입력창 */
 input, select {
   width: 100%;
   padding: 12px;
   margin-bottom: 18px;
-  border: 1px solid #ddd;
+  border: 1px solid #d9d9d9;
   border-radius: 10px;
+  background: #f9f9f9;
   font-size: 15px;
-  background: #fafafa;
-  transition: all 0.2s ease;
+  transition: 0.2s;
 }
 
-/* 포커스 시 */
 input:focus, select:focus {
-  border-color: #7ca9ff;
+  border-color: #779bff;
   background: #fff;
-  box-shadow: 0 0 5px rgba(124, 169, 255, 0.5);
+  box-shadow: 0 0 6px rgba(119,155,255,0.4);
   outline: none;
 }
 
@@ -65,31 +62,30 @@ input:focus, select:focus {
 button {
   width: 100%;
   padding: 14px;
-  margin-top: 10px;
-  background: #7b9bff;
+  background: #7d95ff;
   border: none;
   color: #fff;
   font-weight: bold;
   border-radius: 12px;
   cursor: pointer;
   font-size: 16px;
+  margin-top: 10px;
   transition: 0.2s;
-  box-shadow: 0 4px 10px rgba(123,155,255,0.3);
+  box-shadow: 0 4px 12px rgba(125,149,255,0.25);
 }
 
 button:hover {
-  background: #567dff;
+  background: #5d78ff;
   transform: translateY(-2px);
 }
 
-/* 텍스트 박스 */
+/* 출력 박스 */
 .box {
-  background: #f3f6ff;
-  border: 1px solid #d6dfff;
+  background: #f2f4ff;
+  border: 1px solid #dde3ff;
   padding: 15px;
   border-radius: 12px;
-  min-height: 130px;
-  margin-bottom: 15px;
+  min-height: 120px;
   white-space: pre-wrap;
   line-height: 1.6;
   color: #333;
@@ -101,6 +97,5 @@ button:hover {
 h3 {
   margin-top: 25px;
   margin-bottom: 10px;
-  font-size: 20px;
-  color: #3b3b3b;
+  font-size: 19px;
 }
