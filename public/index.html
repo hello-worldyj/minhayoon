@@ -3,45 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>책 요약 생성기</title>
+  <title>민하윤</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>책 요약 생성기</h1>
+  <div class="wrap">
 
-    <label for="title">책 제목</label>
-    <input type="text" id="title" />
+    <h1> 책 요약 생성기</h1>
 
-    <label for="author">작가</label>
-    <input type="text" id="author" />
+    <label>책 제목</label>
+    <input id="title" type="text" />
 
-    <label for="lang">언어</label>
+    <label>작가</label>
+    <input id="author" type="text" />
+
+    <label>언어</label>
     <select id="lang">
       <option value="한국어">한국어</option>
       <option value="영어">영어</option>
     </select>
 
-    <label for="tone">말투</label>
+    <label>톤</label>
     <select id="tone">
-      <option value="정상">정상</option>
-      <option value="하윤-짝사랑">하윤이가 짝사랑 상대한테 말하는 말투</option>
-      <option value="하윤-친구">하윤이가 친구들한테 말하는 말투</option>
+      <option value="normal">정상</option>
+      <option value="love">하윤이가 짝사랑한테 하는 말투</option>
+      <option value="friend">하윤이가 친구한테 하는 말투</option>
     </select>
 
-    <label for="num">요약 문장 수</label>
-    <input type="number" id="num" min="1" max="10" value="3" />
+    <label>요약 문장 수</label>
+    <input id="num" type="number" min="1" max="100" value="15" />
 
     <button onclick="generate()">생성하기</button>
 
     <h3>책 설명</h3>
-    <div id="intro" class="box"></div>
+    <pre id="intro"></pre>
 
     <h3>요약</h3>
-    <div id="summary" class="box"></div>
+    <pre id="summary"></pre>
 
-    <button onclick="copyText('intro')">책 설명 복사</button>
+    <button onclick="copyText('intro')">설명 복사</button>
     <button onclick="copyText('summary')">요약 복사</button>
+
   </div>
 
   <script src="script.js"></script>
