@@ -1,99 +1,103 @@
-/* ✨ 전반적인 페이지 스타일 */
+/* =====================
+    GLOBAL
+===================== */
 body {
-  font-family: 'Pretendard', 'Arial', sans-serif;
-  background: linear-gradient(135deg, #ffe4ef, #d9e9ff);
+  font-family: "Inter", sans-serif;
+  background: var(--teal-bg);
   margin: 0;
   padding: 0;
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+
+  --teal: #2dd4bf;
+  --teal-dark: #14b8a6;
+  --teal-light: #5eead4;
+  --teal-bg: #f0fdfa;
+
+  --text-main: #083344;
+  --text-light: #155e75;
 }
 
-/* ✨ 카드 전체 컨테이너 (다이어리 + 젤리 느낌) */
+/* =====================
+    CONTAINER
+===================== */
 .container {
-  width: 90%;
-  max-width: 600px;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(15px);
-  padding: 24px;
-  border-radius: 22px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
   margin-top: 40px;
-  border: 1px solid rgba(255,255,255,0.5);
+  width: 90%;
+  max-width: 650px;
+  background: white;
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--teal-light);
 }
 
-/* ✨ 제목 */
-h1 {
-  text-align: center;
-  color: #6e88ff;
-  font-weight: 700;
-  margin-bottom: 20px;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-/* 라벨 */
-label {
-  font-weight: 600;
-  margin-top: 12px;
-  display: block;
-  color: #444;
-}
-
-/* ✨ 입력창과 선택창 스타일 */
-input, select {
+/* =====================
+    INPUT + SELECT
+===================== */
+input, select, textarea {
   width: 100%;
   padding: 12px;
-  margin-top: 6px;
-  border-radius: 14px;
-  border: 1px solid #ccd5ff;
-  background: rgba(255,255,255,0.8);
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
-  font-size: 15px;
-  transition: 0.2s ease;
-}
-
-input:focus, select:focus {
-  outline: none;
-  border-color: #ff9acb;
-  box-shadow: 0 0 8px rgba(255,150,190,0.4);
-}
-
-/* ✨ 버튼 - 젤리 스타일 */
-button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 14px;
-  background: linear-gradient(135deg, #95baff, #ff9acb);
-  color: white;
-  border: none;
-  border-radius: 16px;
   font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  margin-top: 10px;
+  border: 2px solid var(--teal-light);
+  border-radius: 12px;
+  outline: none;
+  background: #ffffff;
   transition: 0.2s;
 }
 
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 16px rgba(0,0,0,0.18);
+input:focus, select:focus, textarea:focus {
+  border-color: var(--teal-dark);
+  box-shadow: 0 0 8px rgba(20, 184, 166, 0.3);
 }
 
-button:active {
-  transform: scale(0.97);
-}
-
-/* ✨ 텍스트 영역 (책 설명 / 요약) */
-pre {
-  background: rgba(255,255,255,0.65);
+/* =====================
+    BUTTON
+===================== */
+button {
+  width: 100%;
+  margin-top: 20px;
   padding: 14px;
+  font-size: 17px;
+  color: white;
+  background: var(--teal-dark);
+  border: none;
   border-radius: 14px;
-  border: 1px solid rgba(200,200,255,0.4);
-  font-size: 14px;
-  min-height: 110px;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-  margin-top: 10px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+button:hover {
+  background: var(--teal);
+  transform: translateY(-2px);
+}
+
+/* =====================
+    OUTPUT BOXES
+===================== */
+.output-box {
+  background: var(--teal-bg);
+  border-left: 6px solid var(--teal);
+  padding: 18px;
+  margin-top: 20px;
+  border-radius: 12px;
+  color: var(--text-main);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* =====================
+    TITLES
+===================== */
+h1 {
+  color: var(--text-main);
+  text-align: center;
+}
+
+h2 {
+  margin-top: 30px;
+  color: var(--text-light);
+  border-bottom: 2px solid var(--teal-light);
+  padding-bottom: 6px;
 }
