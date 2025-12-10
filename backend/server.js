@@ -1,77 +1,74 @@
-import express from 'express';
-import fetch from 'node-fetch';
-import dotenv from 'dotenv';
-import cors from 'cors';
-import OpenAI from "openai";
+const API_BOOK = "/api/book";
+const API_SUMMARY = "/api/summary";
 
-dotenv.config();
+async function generate() {
+  const title = document.getElementById("title").value.trim();
+  const author = document.getElementById("author").value.trim();
+  const lang = document.getElementById("lang").value;
+  const tone = document.getElementById("tone").value;
+  const num = document.getElementById("num").value;
 
-const app = express();
-const port = process.env.PORT || 3000;
+  if (!title) {
+    alert("책 제목을 입력해주세요!");
+    return;
+  }
 
-app.use(cors());
-app.use(express.json());
-app.use(express.static('../public'));
-
-// Google Books API
-app.post('/api/book', async (req, res) => {
-  const { title, author } = req.body;
-  if (!title) return res.status(400).json({ error: "책 제목이 필요합니다." });
+  document.getElementById("intro").innerText = "불러오는 중...";
+  document.getElementById("summary").innerText = "";
 
   try {
-    const query = encodeURIComponent(`${title} ${author || ''}`);
-    const url = `https://www.googleapis.com/books/v1/volumes?q=${query}&key=${process.env.GOOGLE_KEY}&maxResults=1`;
+    // 📌 1) 책 설명 가져오기
+    const introRes = await fetch(API_BOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, author }),
+    });
 
-    const response = await fetch(url);
-    const data = await response.json();
+    const introData = await introRes.json();
 
-    if (!data.items || data.items.length === 0) {
-      return res.json({ description: "" });
+    // 📌 검색 실패한 경우
+    if (introData.error) {
+      document.getElementById("intro").innerText = "책을 찾을 수 없어요!";
+      document.getElementById("summary").innerText = "";
+      return;
     }
 
-    const info = data.items[0].volumeInfo;
-    res.json({ description: info.description || "" });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+    const intro = introData.description || "설명이 없어요!";
+    document.getElementById("intro").innerText = intro;
 
-// OpenAI 요약 API
-app.post('/api/summary', async (req, res) => {
-  const { title, author, description, tone, lang, num } = req.body;
-
-  if (!description)
-    return res.status(400).json({ error: "책 설명이 필요합니다." });
-
-  try {
-    const client = new OpenAI({
-      apiKey: process.env.OPENAI_KEY
+    // 📌 2) 요약 생성 요청
+    const sumRes = await fetch(API_SUMMARY, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title,
+        author,
+        description: intro,
+        tone,
+        lang,
+        num,
+      }),
     });
 
-    const prompt = `
-    책 제목: ${title}
-    저자: ${author}
-    책 설명: ${description}
-    요청 사항: ${num}개의 문장으로, 톤: ${tone}, 언어: ${lang}으로 요약해줘.
-    `;
+    const sumData = await sumRes.json();
 
-    const completion = await client.chat.completions.create({
-      model: "gpt-4o-mini",
-      messages: [
-        { role: "user", content: prompt }
-      ],
-      max_tokens: 500,
-      temperature: 0.7
-    });
+    if (sumData.error) {
+      document.getElementById("summary").innerText = "요약 생성 실패";
+      return;
+    }
 
-    const summary = completion.choices[0].message.content.trim();
-    res.json({ summary });
+    document.getElementById("summary").innerText = sumData.summary;
 
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.log(err);
+    document.getElementById("intro").innerText = "오류 발생!";
+    document.getElementById("summary").innerText = "요약 실패!";
   }
-});
+}
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+function copyText(id) {
+  const text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text)
+    .then(() => alert("복사 완료"))
+    .catch(() => alert("복사 실패!!"));
+}
