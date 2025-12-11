@@ -1,78 +1,70 @@
-:root {
-  --teal: #16c1b5;
-  --white: #ffffff;
-  --black: #111111;
-  --glass: rgba(255, 255, 255, 0.6);
-  --radius: 12px;
-}
-
 body {
-  margin: 0;
-  padding: 40px 0;
-  font-family: Pretendard, sans-serif;
-  background: linear-gradient(135deg, #d6fffa, #f9ffff);
+  background: #f0f7f7;
+  font-family: Arial, sans-serif;
+  padding: 40px;
   display: flex;
   justify-content: center;
 }
 
 .container {
-  width: 90%;
-  max-width: 600px;
-  background: var(--glass);
+  width: 450px;
   padding: 30px;
-  border-radius: var(--radius);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255,255,255,0.6);
 }
 
 h1 {
-  text-align: center;
-  color: var(--black);
+  color: #006d6d;
   margin-bottom: 20px;
 }
 
 label {
-  margin-top: 15px;
-  display: block;
-  font-weight: 600;
+  font-weight: bold;
+  color: #003d3d;
 }
 
-input, textarea, select {
+input, select, textarea {
   width: 100%;
-  padding: 12px;
-  border-radius: var(--radius);
-  border: 1px solid #ccc;
-  margin-top: 6px;
-  font-size: 15px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #bbd9d9;
+  outline: none;
 }
 
 textarea {
-  height: 120px;
+  height: 100px;
 }
 
 button {
   width: 100%;
-  padding: 14px;
-  margin-top: 20px;
-  background: var(--teal);
-  border: none;
-  border-radius: var(--radius);
-  color: var(--white);
+  padding: 12px;
   font-size: 16px;
-  font-weight: 700;
+  background: rgba(0, 128, 128, 0.3);
+  color: black;
+  border: 1px solid #008080;
+  border-radius: 10px;
+  backdrop-filter: blur(4px);
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(22,193,181,0.4);
-  transition: 0.25s;
+  transition: 0.2s;
 }
 
 button:hover {
-  background: #119e94;
+  background: rgba(0, 128, 128, 0.5);
+}
+
+h2 {
+  margin-top: 20px;
+  color: #004f4f;
 }
 
 pre {
-  background: #eefaf8;
+  background: white;
   padding: 15px;
-  border-radius: var(--radius);
-  white-space: pre-wrap;
+  border-radius: 10px;
   min-height: 80px;
+  border: 1px solid #d2eaea;
 }
