@@ -1,1 +1,56 @@
+body {
+  font-family: "Pretendard", sans-serif;
+  background: #f8fafb;
+  padding: 40px;
+  color: #0e1a1f;
+}
 
+.title {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #009e9e; /* transformative teal */
+}
+
+.box {
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  max-width: 350px;
+}
+
+input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid #009e9e40;
+  font-size: 15px;
+}
+
+button {
+  background: #009e9e;
+  border: none;
+  padding: 14px 22px;
+  color: white;
+  font-size: 17px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #007f7f;
+}
+
+h2 {
+  margin-top: 30px;
+  color: #005f5f;
+}
+
+.result {
+  white-space: pre-line;
+  padding: 15px;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 2px solid #009e9e30;
+  margin-top: 10px;
+}
