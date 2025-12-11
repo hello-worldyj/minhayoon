@@ -1,40 +1,26 @@
-document.getElementById("generateBtn").addEventListener("click", generate);
+document.getElementById("generateBtn").addEventListener("click", async () => {
+  const title = document.getElementById("titleInput").value.trim();
+  const lang = document.getElementById("lang").value;
+  const tone = document.getElementById("tone").value;
+  const num = document.getElementById("num").value;
 
-async function generate() {
-  const titleVal = document.getElementById("titleInput").value.trim();
-  const authorVal = document.getElementById("author").value.trim();
-  const langVal = document.getElementById("lang").value;
-  const toneVal = document.getElementById("tone").value;
-  const numVal = document.getElementById("num").value;
+  const intro = document.getElementById("intro");
+  const summary = document.getElementById("summary");
 
-  if (!titleVal) return alert("책 제목을 버리지 마세요.");
+  if (!title) return alert("책 제목을 버리지 마세요 ㅠ");
 
-  document.getElementById("intro").innerText = "불러오는 중...";
-  document.getElementById("summary").innerText = "생성 중...";
+  intro.innerText = "불러오는 중...";
+  summary.innerText = "생성 중...";
 
-  try {
-    const res = await fetch("/api/summary", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: titleVal,
-        author: authorVal,
-        lang: langVal,
-        tone: toneVal,
-        num: numVal
-      })
-    });
+  const res = await fetch("/api/summary", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title, lang, tone, num })
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    document.getElementById("intro").innerText =
-      data.intro || "소개가 있엇는데 없어요";
+  intro.innerText = data.intro || "소개가 있엇는데 없어요";
+  summary.innerText = data.summary || "요약 생성 실패! ㅋ 와 ㅊㅊ";
+});
 
-    document.getElementById("summary").innerText =
-      data.summary || "요약 생성 실패! ㅋ 와 ㅊㅊ";
-
-  } catch (err) {
-    document.getElementById("intro").innerText = "오류 발생!";
-    document.getElementById("summary").innerText = "서버와 연결 실패!ㅋ";
-  }
-}
