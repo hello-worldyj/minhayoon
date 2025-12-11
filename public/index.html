@@ -2,32 +2,43 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>요약 생성기</title>
+  <title>책 요약기</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="container">
+    <h1>책 요약 생성기</h1>
 
-  <h1>요약 생성기</h1>
+    <label>책 제목</label>
+    <input id="title" placeholder="예: 어쩌고" />
 
-  <input id="title" placeholder="책 제목" />
-  <input id="author" placeholder="저자" />
-  <textarea id="intro" placeholder="책 소개가 여기에 자동 생성됩니다"></textarea>
+    <label>저자</label>
+    <input id="author" placeholder="예: 저쩌고" />
 
-  <select id="tone">
-    <option value="friendly">친근하게</option>
-    <option value="formal">격식 있게</option>
-  </select>
+    <label>언어</label>
+    <select id="lang">
+      <option value="ko">한국어</option>
+      <option value="en">English</option>
+    </select>
 
-  <select id="lang">
-    <option value="ko">한국어</option>
-    <option value="en">영어</option>
-  </select>
+    <label>톤</label>
+    <select id="tone">
+      <option value="default">기본</option>
+      <option value="formal">격식체</option>
+      <option value="casual">편안한 말투</option>
+    </select>
 
-  <input id="num" type="number" value="3" />
+    <label>요약 길이(문장 수)</label>
+    <select id="num">
+      <option>3</option>
+      <option>5</option>
+      <option>7</option>
+    </select>
 
-  <button onclick="generate()">생성</button>
+    <button onclick="generate()">요약 생성</button>
 
-  <textarea id="summary" placeholder="요약 결과"></textarea>
+    <pre id="output"></pre>
+  </div>
 
   <script src="script.js"></script>
 </body>
