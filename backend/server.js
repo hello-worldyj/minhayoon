@@ -1,25 +1,19 @@
 import express from "express";
 import cors from "cors";
-import path from "path";
-import { fileURLToPath } from "url";
+import dotenv from "dotenv";
 import OpenAI from "openai";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+dotenv.config();
 
 const app = express();
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-// ------- Public 폴더 정적 제공 ---------
-app.use(express.static(path.join(__dirname, "..", "public")));
-
-// ------- OpenAI 초기화 ---------
 const client = new OpenAI({
   apiKey: process.env.OPENAI_KEY
 });
 
-// ------- 책 설명 API ---------
+// -------------------- BOOK API --------------------
 app.post("/book", async (req, res) => {
   try {
     const { title, author } = req.body;
@@ -27,13 +21,24 @@ app.post("/book", async (req, res) => {
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: "너는 책 정보를 간단히 찾아주는 도우미야." },
-        { role: "user", content: `책 제목: ${title}, 작가: ${author} 설명 알려줘.` }
+        {
+          role: "system",
+          content: `
+너는 책 정보 검증 도우미다.
+- 실제 존재하는 책이 아닐 경우 반드시 "해당 책은 존재하지 않습니다."라고 답한다.
+- 어떤 경우에도 창작하거나 지어내지 않는다.
+- 인터넷에 존재하는 사실만 사용하고, 모르면 "정보를 찾을 수 없습니다."라고 말한다.
+          `
+        },
+        {
+          role: "user",
+          content: `책 제목: ${title}, 작가: ${author}, 설명을 알려줘.`
+        }
       ]
     });
 
-    const text = completion.choices[0].message.content.trim();
-    res.json({ description: text });
+    const desc = completion.choices[0].message.content.trim();
+    res.json({ description: desc });
 
   } catch (err) {
     console.error(err);
@@ -41,33 +46,49 @@ app.post("/book", async (req, res) => {
   }
 });
 
-// ------- 요약 생성 API ---------
+// -------------------- SUMMARY API --------------------
 app.post("/summary", async (req, res) => {
   try {
     const { title, author, description, tone, lang, num } = req.body;
 
-    const msg = `
-제목: ${title}
-작가: ${author}
-설명: ${description}
-
-톤: ${tone}
-언어: ${lang}
-문단 수: ${num}
-
-요약 생성해줘.
-`;
+    // description이 "존재하지 않습니다"인 경우 요약 생성 금지
+    if (
+      description.includes("존재하지 않습니다") ||
+      description.includes("찾을 수 없습니다")
+    ) {
+      return res.json({
+        summary: "책 정보가 없어 요약을 생성할 수 없습니다."
+      });
+    }
 
     const completion = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: "너는 책 요약을 만드는 도우미야." },
-        { role: "user", content: msg }
+        {
+          role: "system",
+          content: `
+너는 전문 요약가이다.
+- 사용자가 준 설명(description) 안에서만 요약한다.
+- 내용을 추가하거나 창작하지 않는다.
+          `
+        },
+        {
+          role: "user",
+          content: `
+제목: ${title}
+저자: ${author}
+설명: ${description}
+
+요약 문장 수: ${num}
+톤: ${tone}
+언어: ${lang}
+          `
+        }
       ]
     });
 
-    const text = completion.choices[0].message.content.trim();
-    res.json({ summary: text });
+    const summary = completion.choices[0].message.content.trim();
+    res.json({ summary });
 
   } catch (err) {
     console.error(err);
@@ -75,11 +96,7 @@ app.post("/summary", async (req, res) => {
   }
 });
 
-// ------- 기본 / 라우트 (Cannot GET / 해결 핵심) ---------
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "public", "index.html"));
+// -------------------- SERVER --------------------
+app.listen(10000, () => {
+  console.log("Server running on port 10000");
 });
-
-// ------- 서버 시작 ---------
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("Server running on port " + PORT));
