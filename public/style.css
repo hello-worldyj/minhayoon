@@ -1,60 +1,56 @@
 body {
-  background: #f3f9f9;
   font-family: "Pretendard", sans-serif;
-  color: #003f4f;
+  background: #f8fafb;
+  padding: 40px;
+  color: #0e1a1f;
 }
 
-.wrap {
-  max-width: 640px;
-  margin: 40px auto;
-  padding: 30px;
-  background: white;
-  border-radius: 14px;
-  box-shadow: 0 4px 20px rgba(0, 80, 100, 0.1);
-  border: 2px solid #8be0dd;
-}
-
-h1 {
+.title {
   text-align: center;
-  color: #006d6b;
-  margin-bottom: 25px;
+  font-size: 32px;
+  margin-bottom: 30px;
+  color: #009e9e; /* transformative teal */
 }
 
-.row {
-  margin-bottom: 18px;
+.box {
+  margin-bottom: 14px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  max-width: 350px;
 }
 
-input,
-select {
+input {
   padding: 10px;
   border-radius: 8px;
-  border: 1px solid #8be0dd;
-  background: #e7fafa;
+  border: 2px solid #009e9e40;
+  font-size: 15px;
 }
 
 button {
-  padding: 12px;
-  width: 100%;
+  background: #009e9e;
   border: none;
-  border-radius: 10px;
-  background: #20b8b5;
+  padding: 14px 22px;
   color: white;
-  font-size: 15px;
+  font-size: 17px;
+  border-radius: 10px;
   cursor: pointer;
-  margin: 10px 0;
+  transition: 0.2s;
 }
 
 button:hover {
-  background: #169d9a;
+  background: #007f7f;
 }
 
-pre {
-  background: #eefdfd;
+h2 {
+  margin-top: 30px;
+  color: #005f5f;
+}
+
+.result {
+  white-space: pre-line;
   padding: 15px;
+  background: #ffffff;
   border-radius: 10px;
-  white-space: pre-wrap;
-  border: 1px solid #8be0dd;
+  border: 2px solid #009e9e30;
+  margin-top: 10px;
 }
