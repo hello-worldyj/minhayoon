@@ -9,10 +9,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ⭐ public 폴더 제공(prefix 없이)
+// ⭐ static 파일 서빙
 app.use(express.static("public"));
 
-// OpenAI 클라이언트
+// ⭐ OpenAI Client
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -20,7 +20,7 @@ const openai = new OpenAI({
 // ⭐ 요약 API
 app.post("/api/summary", async (req, res) => {
   try {
-    console.log("📥 들어온 내용:", req.body);
+    console.log("📥 들어온 요청:", req.body);
 
     const { title, author, description, tone, lang, num } = req.body;
 
@@ -29,12 +29,12 @@ app.post("/api/summary", async (req, res) => {
     }
 
     const prompt = `
-설명을 기반으로 문장 ${num}개로 요약해줘.
+다음 설명을 기반으로 ${num}문장으로 요약하세요.
 - 언어: ${lang}
 - 톤: ${tone}
-- 새로운 내용 금지
+- 새로운 내용 추가 금지
 
-책 제목: ${title}
+제목: ${title}
 작가: ${author}
 
 설명:
@@ -47,18 +47,19 @@ ${description}
     });
 
     res.json({ summary: response.output_text });
-
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error("❌ SUMMARY ERROR:", error);
     res.json({ summary: "요약 중 오류 발생" });
   }
 });
 
-// 기본 라우트
+// ⭐ 메인 페이지
 app.get("/", (req, res) => {
   res.sendFile(process.cwd() + "/public/index.html");
 });
 
-// 서버 시작
+// ⭐ 서버 시작
 const PORT = process.env.PORT || 10000;
-app.listen(PORT, () => console.log("🚀 Server running on " + PORT));
+app.listen(PORT, () => {
+  console.log("🚀 Server running on port " + PORT);
+});
