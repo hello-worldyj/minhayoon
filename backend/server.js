@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import fetch from "node-fetch";
 import OpenAI from "openai";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
@@ -10,136 +12,105 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// ====== public 정적 제공 (Cannot GET / 해결) ======
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, "public")));
 
-// ───────────────────────────────
-// 유사도 계산 (오타 감지)
-// ───────────────────────────────
-function similarity(a, b) {
-  a = a.toLowerCase();
-  b = b.toLowerCase();
-  const longer = a.length > b.length ? a : b;
-  const shorter = a.length > b.length ? b : a;
-  const longerLength = longer.length;
+// ====== OpenAI 클라이언트 ======
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-  let sameCount = 0;
-  for (let i = 0; i < shorter.length; i++) {
-    if (longer.includes(shorter[i])) sameCount++;
-  }
-  return sameCount / longerLength;
-}
-
-// ───────────────────────────────
-// 책 검색 (오타 포함 검증)
-// ───────────────────────────────
-async function searchBooks(title, author) {
-  const q = `intitle:${encodeURIComponent(title)}+inauthor:${encodeURIComponent(
-    author
-  )}`;
-
-  const url = `https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=10&key=${process.env.GOOGLE_KEY}`;
+// ====== Google Books API ======
+async function fetchBookInfo(title) {
+  const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
+    title
+  )}&key=${process.env.GOOGLE_KEY}`;
 
   const res = await fetch(url);
   const data = await res.json();
 
-  if (!data.items) return [];
+  if (!data.items || data.items.length === 0) return null;
 
-  const results = data.items.map((item) => {
-    const info = item.volumeInfo;
-    return {
-      id: item.id,
-      title: info.title || "",
-      authors: info.authors ? info.authors.join(", ") : "",
-    };
-  });
+  const book = data.items[0].volumeInfo;
 
-  // 유사도 필터링
-  const filtered = results.filter((b) => {
-    const tScore = similarity(title, b.title);
-    const aScore = similarity(author, b.authors);
-    return tScore > 0.6 || aScore > 0.6;
-  });
-
-  return filtered;
+  return {
+    title: book.title || "",
+    author: (book.authors && book.authors[0]) || "",
+    description: book.description || "",
+  };
 }
 
-// ───────────────────────────────
-// 요약 API
-// ───────────────────────────────
+// ============= API: 요약 + 소개 생성 =============
 app.post("/api/summary", async (req, res) => {
   try {
-    const { title, author, lang, tone, num } = req.body;
+    const { title, lang, tone, num } = req.body;
 
-    // 1) 책 검색
-    const books = await searchBooks(title, author);
+    if (!title) return res.json({ error: "제목이 비었습니다." });
 
-    // 2) 아예 없음
-    if (books.length === 0) {
+    // 책 정보 가져오기
+    const info = await fetchBookInfo(title);
+
+    if (!info) {
       return res.json({
-        status: "no_match",
-        message: "❌ 실제 책을 찾을 수 없습니다. 제목/작가를 다시 확인해주세요.",
-        candidates: [],
+        bookInfo: {
+          title,
+          author: "",
+          description: "",
+        },
+        summary: "⚠️ 책을 찾을 수 없습니다. 제목을 다시 확인해주세요.",
       });
     }
 
-    // 3) 후보가 여러 개 → 선택하도록 반환
-    if (books.length > 1) {
+    // 설명 없으면 안내
+    if (!info.description) {
       return res.json({
-        status: "multiple",
-        message: "여러 개의 비슷한 책이 발견되었습니다.",
-        candidates: books,
+        bookInfo: info,
+        summary: "⚠️ 책 설명이 존재하지 않습니다.",
       });
     }
 
-    // 4) 정확히 1개 → 요약 진행
-    const book = books[0];
+    const prompt = `
+규칙:
+1) 새로운 내용 상상 금지
+2) 문체: ${tone}
+3) 언어: ${lang}
+4) 요약 문장 수: ${num}
 
-    const introPrompt = `
-책 제목: ${book.title}
-작가: ${book.authors}
+책 제목: ${info.title}
+작가: ${info.author}
 
-이 책은 실제 존재합니다.
-이 책의 실제 내용을 기반으로 짧은 소개를 ${lang}로 작성하세요.
-문체: ${tone}
-`;
+설명:
+${info.description}
 
-    const introRes = await openai.responses.create({
-      model: "gpt-4o-mini",
-      input: introPrompt,
-    });
-
-    const introText = introRes.output_text;
-
-    const summaryPrompt = `
-아래 소개를 기반으로 새로운 내용 창작 없이
-${num}문장으로 요약하세요.
-
+출력 형식:
 소개:
-${introText}
-
-언어: ${lang}
-문체: ${tone}
+요약:
 `;
 
-    const sumRes = await openai.responses.create({
+    const response = await openai.responses.create({
       model: "gpt-4o-mini",
-      input: summaryPrompt,
+      input: prompt,
     });
 
     res.json({
-      status: "ok",
-      intro: introText,
-      summary: sumRes.output_text,
-      book,
+      bookInfo: info,
+      summary: response.output_text,
     });
-  } catch (e) {
-    console.log(e);
-    res.json({
-      status: "error",
-      intro: "",
-      summary: "",
-    });
+  } catch (err) {
+    console.error("SUMMARY ERROR:", err);
+    res.json({ summary: "요약 중 오류 발생" });
   }
 });
 
-app.listen(10000, () => console.log("SERVER RUNNING"));
+// =========== 기본 라우트 ===========
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// =========== 서버 시작 ===========
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => {
+  console.log("Server running on port " + PORT);
+});
