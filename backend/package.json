@@ -1,16 +1,14 @@
 {
-  "name": "book-summary-api",
+  "name": "book-summary-server",
   "version": "1.0.0",
-  "main": "server.js",
   "type": "module",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.18.2",
+    "openai": "^4.0.0",
+    "cors": "^2.8.5"
+  },
   "scripts": {
     "start": "node server.js"
-  },
-  "dependencies": {
-    "axios": "^1.6.7",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "openai": "^4.20.1"
   }
 }
