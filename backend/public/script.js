@@ -1,16 +1,32 @@
-document.getElementById("generateBtn").addEventListener("click", async () => {
+async function getIntro() {
+  const titleVal = document.getElementById("title").value.trim();
+  const authorVal = document.getElementById("author").value.trim();
+
+  document.getElementById("intro").innerText = "불러오는 중...";
+
+  const res = await fetch("/api/book", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title: titleVal, author: authorVal }),
+  });
+
+  const data = await res.json();
+  document.getElementById("intro").innerText = data.description || "설명 없음";
+}
+
+async function generate() {
+  const description = document.getElementById("intro").innerText;
+
   const payload = {
-    title: document.getElementById("title").value,
-    author: document.getElementById("author").value,
-    description: document.getElementById("description").value,
-    tone: document.getElementById("tone").value,
-    lang: document.getElementById("lang").value,
-    num: document.getElementById("num").value,
+    title: title.value,
+    author: author.value,
+    description,
+    tone: tone.value,
+    lang: lang.value,
+    num: num.value,
   };
 
-  console.log("📤 서버로 보냄:", payload);
-
-  document.getElementById("summary").innerText = "요약 생성 중...";
+  summary.innerText = "요약 생성 중...";
 
   const res = await fetch("/api/summary", {
     method: "POST",
@@ -19,5 +35,5 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
   });
 
   const data = await res.json();
-  document.getElementById("summary").innerText = data.summary;
-});
+  summary.innerText = data.summary;
+}
