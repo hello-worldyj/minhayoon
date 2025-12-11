@@ -1,46 +1,47 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>책 요약 생성기</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="box">
-    <h1>책 요약 생성기</h1>
 
-    <label>책 제목</label>
-    <input type="text" id="title" />
+<div class="container">
+  <h1>📚 책 요약 생성기</h1>
 
-    <label>작가</label>
-    <input type="text" id="author" />
+  <label>책 제목</label>
+  <input id="title" type="text">
 
-    <label>언어</label>
-    <select id="lang">
-      <option value="한국어">한국어</option>
-      <option value="영어">영어</option>
-    </select>
+  <label>작가</label>
+  <input id="author" type="text">
 
-    <label>톤</label>
-    <select id="tone">
-      <option value="기본 말투">기본 말투</option>
-      <option value="하윤이가 좋아하는 사람에게 말하는 말투">하윤이가 좋아하는 사람에게 말하는 말투</option>
-      <option value="하윤이가 친구한테 말하는 말투">하윤이가 친구한테 말하는 말투</option>
-    </select>
+  <label>책 설명</label>
+  <textarea id="description"></textarea>
 
-    <label>요약 문장 수 (원하는 숫자 직접 입력)</label>
-    <input type="number" id="num" min="1" value="5" />
+  <label>언어</label>
+  <select id="lang">
+    <option value="한국어">한국어</option>
+    <option value="영어">영어</option>
+  </select>
 
-    <button onclick="generate()">생성하기</button>
+  <label>톤</label>
+  <select id="tone">
+    <option value="기본 말투">기본 말투</option>
+    <option value="하윤이가 좋아하는 사람에게 말하는 말투">하윤이가 좋아하는 사람에게 말하는 말투</option>
+    <option value="하윤이가 친구에게 말하는 말투">하윤이가 친구에게 말하는 말투</option>
+  </select>
 
-    <h3>책 설명</h3>
-    <pre id="intro"></pre>
+  <label>요약 문장 수</label>
+  <input id="num" type="number" value="5" min="1">
 
-    <h3>요약</h3>
-    <pre id="summary"></pre>
-  </div>
+  <button id="generateBtn">요약 생성하기</button>
 
-  <script src="script.js"></script>
+  <h3>요약 결과</h3>
+  <pre id="summary"></pre>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
