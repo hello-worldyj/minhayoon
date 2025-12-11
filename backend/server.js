@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import OpenAI from "openai";
 
@@ -8,22 +7,48 @@ dotenv.config();
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-// OpenAI client
+// OpenAI Client
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
 // ===============================
-//         SUMMARY API
+//          BOOK API
+// ===============================
+app.post("/api/book", async (req, res) => {
+  try {
+    const { title, author } = req.body;
+
+    if (!title) return res.json({ description: null });
+
+    const query = `intitle:${encodeURIComponent(title)}+inauthor:${encodeURIComponent(author ?? "")}`;
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${query}`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (!data.items || data.items.length === 0)
+      return res.json({ description: null });
+
+    const desc = data.items[0].volumeInfo.description ?? null;
+    res.json({ description: desc });
+  } catch (e) {
+    console.error("BOOK ERROR:", e);
+    res.json({ description: null });
+  }
+});
+
+// ===============================
+//        SUMMARY API
 // ===============================
 app.post("/api/summary", async (req, res) => {
   try {
     const { title, author, description, tone, lang, num } = req.body;
 
-    if (!title || !description) {
-      return res.json({ summary: "제목이나 설명이 비어 있습니다." });
+    if (!description) {
+      return res.json({ summary: "설명이 없어요." });
     }
 
     const prompt = `
@@ -41,12 +66,12 @@ app.post("/api/summary", async (req, res) => {
 ${description}
 `;
 
-    const response = await openai.responses.create({
+    const result = await openai.responses.create({
       model: "gpt-4o-mini",
       input: prompt,
     });
 
-    res.json({ summary: response.output_text });
+    res.json({ summary: result.output_text });
   } catch (err) {
     console.error("SUMMARY ERROR:", err);
     res.json({ summary: "요약 중 오류 발생" });
@@ -64,6 +89,7 @@ app.get("/", (req, res) => {
 //         START SERVER
 // ===============================
 const PORT = process.env.PORT || 10000;
+
 app.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
+  console.log(`Server running on port ${PORT}`);
 });
