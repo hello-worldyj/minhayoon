@@ -40,8 +40,8 @@ app.post("/api/summary", async (req, res) => {
     const exists = await checkBookExists(title, author);
     if (!exists) {
       return res.json({ 
-        intro: "❌ 존재하지 않는 책입니다. 제목/작가를 다시 확인해주세요.",
-        summary: ""
+        intro: " ??? 제목/작가/오타 다시 확인.",
+        summary: "..."
       });
     }
 
