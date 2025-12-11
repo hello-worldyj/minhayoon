@@ -1,23 +1,22 @@
 const API_BOOK = "/book";
 const API_SUMMARY = "/summary";
 
+document.getElementById("generate").addEventListener("click", generate);
+
 async function generate() {
   const title = document.getElementById("title").value.trim();
   const author = document.getElementById("author").value.trim();
-  const tone = document.getElementById("tone").value;
-  const lang = document.getElementById("lang").value;
-  const num = document.getElementById("num").value;
+
+  if (!title) return alert("책 제목을 입력하세요!");
 
   const intro = document.getElementById("intro");
   const summary = document.getElementById("summary");
 
-  if (!title) return alert("책 제목을 입력해주세요!");
-
-  intro.innerText = "책 정보 불러오는 중…";
+  intro.innerText = "📙 책 설명 생성 중...";
   summary.innerText = "";
 
   try {
-    // 📘 책 설명 요청
+    // 책 설명
     const bookRes = await fetch(API_BOOK, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -25,18 +24,11 @@ async function generate() {
     });
 
     const bookData = await bookRes.json();
-    const desc = bookData.description || "";
-
-    // 설명 없음 → STOP
-    if (!desc) {
-      intro.innerText = "책 설명이 없어요!";
-      summary.innerText = "설명이 없어서 요약을 만들 수 없어요.";
-      return;
-    }
+    const desc = bookData.description || "설명이 없습니다!";
 
     intro.innerText = desc;
 
-    // ✏️ 요약 생성
+    // 요약
     const sumRes = await fetch(API_SUMMARY, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -44,22 +36,17 @@ async function generate() {
         title,
         author,
         description: desc,
-        tone,
-        lang,
-        num
+        tone: "중립",
+        lang: "한국어",
+        num: 3
       })
     });
 
     const sumData = await sumRes.json();
-    summary.innerText = sumData.summary;
+    summary.innerText = sumData.summary || "요약 생성 실패";
 
-  } catch (e) {
-    intro.innerText = "문제가 발생했어요!";
+  } catch (err) {
+    intro.innerText = "오류 발생!";
+    console.error(err);
   }
-}
-
-// 복사
-function copyText(id) {
-  const t = document.getElementById(id).innerText;
-  navigator.clipboard.writeText(t);
 }
