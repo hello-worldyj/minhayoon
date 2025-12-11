@@ -6,55 +6,26 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <h1 class="title">📘 책 요약 생성기</h1>
 
-<div class="wrap">
-
-  <h1>책 요약 생성기</h1>
-
-  <div class="row">
+  <div class="box">
     <label>책 제목</label>
-    <input id="title" placeholder="예: 해리포터" />
+    <input id="title">
   </div>
 
-  <div class="row">
+  <div class="box">
     <label>작가</label>
-    <input id="author" placeholder="예: J.K. 롤링" />
+    <input id="author">
   </div>
 
-  <div class="row">
-    <label>말투</label>
-    <select id="tone">
-      <option value="보통">보통</option>
-      <option value="짝사랑하는 사람에게 말하듯">짝사랑하는 사람에게 말하듯</option>
-      <option value="친구한테 말하듯">친구한테 말하듯</option>
-    </select>
-  </div>
+  <button id="generate">생성하기</button>
 
-  <div class="row">
-    <label>언어</label>
-    <select id="lang">
-      <option value="한국어">한국어</option>
-      <option value="영어">영어</option>
-    </select>
-  </div>
+  <h2>📙 책 설명</h2>
+  <div id="intro" class="result"></div>
 
-  <div class="row">
-    <label>문단 수</label>
-    <input id="num" value="3" type="number" min="1" max="10" />
-  </div>
+  <h2>📗 요약</h2>
+  <div id="summary" class="result"></div>
 
-  <button onclick="generate()">요약 만들기</button>
-
-  <h2>책 설명</h2>
-  <pre id="intro"></pre>
-  <button onclick="copyText('intro')">복사</button>
-
-  <h2>요약</h2>
-  <pre id="summary"></pre>
-  <button onclick="copyText('summary')">복사</button>
-
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
