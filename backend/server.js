@@ -24,8 +24,8 @@ app.post("/api/summary", async (req, res) => {
 
     if (!title) {
       return res.json({
-        intro: "책 제목이 없어요!",
-        summary: "",
+        intro: "책 재목은여?",
+        summary: "ㅠㅠ",
       });
     }
 
@@ -47,8 +47,8 @@ app.post("/api/summary", async (req, res) => {
 
     if (exists !== "YES") {
       return res.json({
-        intro: "존재하지 않는 책입니다.",
-        summary: "요약 불가.",
+        intro: "ㅓㅓ 책을 찾을수가 없는데여?",
+        summary: ".ㅠㅠ.",
       });
     }
 
@@ -87,8 +87,8 @@ app.post("/api/summary", async (req, res) => {
   } catch (err) {
     console.error("SUMMARY ERROR:", err);
     res.json({
-      intro: "오류 발생",
-      summary: "요약 중 오류 발생",
+      intro: "오류오류오류오류오류오류오류오류오류오류오류오류오류오류오류오류오류오류오류오류오류오류오륭로유로유로유로오류오류오류오류오류오류오류오오로ㅠ오류오류오류ㅗ유로유로유ㅗ류오류오",
+      summary: "아아아ㅏ아아ㅏ아아아아아아아아앙아아아아아아아아아아아아아ㅏ아아ㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
     });
   }
 });
