@@ -1,47 +1,49 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>책 요약 생성기</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1> 책 요약 생성기</h1>
 
-    <label>책 제목</label>
-    <input type="text" id="title">
+<div class="box">
 
-    <label>작가</label>
-    <input type="text" id="author">
+  <h1>📚 책 요약 생성기</h1>
 
-    <button onclick="getIntro()">📖 책 설명 불러오기</button>
+  <label>책 제목</label>
+  <input type="text" id="title">
 
-    <h3>책 설명</h3>
-    <pre id="intro"></pre>
+  <label>작가</label>
+  <input type="text" id="author">
 
-    <label>언어</label>
-    <select id="lang">
-      <option>한국어</option>
-      <option>영어</option>
-    </select>
+  <label>언어</label>
+  <select id="lang">
+    <option value="한국어">한국어</option>
+    <option value="영어">영어</option>
+  </select>
 
-    <label>톤</label>
-    <select id="tone">
-      <option>기본 말투</option>
-      <option>따뜻한 말투</option>
-      <option>친근한 말투</option>
-    </select>
+  <label>톤</label>
+  <select id="tone">
+    <option value="기본 말투">기본 말투</option>
+    <option value="친근한 말투">친근한 말투</option>
+    <option value="귀여운 말투">귀여운 말투</option>
+  </select>
 
-    <label>문장 수</label>
-    <input id="num" type="number" value="5">
+  <label>요약 문장 수</label>
+  <input type="number" id="num" min="1" value="5">
 
-    <button onclick="generate()"> 요약 생성</button>
+  <button onclick="generate()">생성하기</button>
 
-    <h3>요약 결과</h3>
-    <pre id="summary"></pre>
-  </div>
+  <h3>📘 책 소개</h3>
+  <pre id="intro"></pre>
 
-  <script src="script.js"></script>
+  <h3>✨ 요약</h3>
+  <pre id="summary"></pre>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
