@@ -2,20 +2,27 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import OpenAI from "openai";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// OpenAI Client
+// ===============================
+//          OPENAI CLIENT
+// ===============================
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
 // ===============================
-//          BOOK API
+//        BOOK SEARCH API
 // ===============================
 app.post("/api/book", async (req, res) => {
   try {
@@ -23,7 +30,7 @@ app.post("/api/book", async (req, res) => {
 
     if (!title) return res.json({ description: null });
 
-    const query = `intitle:${encodeURIComponent(title)}+inauthor:${encodeURIComponent(author ?? "")}`;
+    const query = `intitle:${encodeURIComponent(title)}+inauthor:${encodeURIComponent(author)}`;
     const url = `https://www.googleapis.com/books/v1/volumes?q=${query}`;
 
     const response = await fetch(url);
@@ -32,10 +39,11 @@ app.post("/api/book", async (req, res) => {
     if (!data.items || data.items.length === 0)
       return res.json({ description: null });
 
-    const desc = data.items[0].volumeInfo.description ?? null;
+    const desc = data.items[0].volumeInfo.description || null;
+
     res.json({ description: desc });
-  } catch (e) {
-    console.error("BOOK ERROR:", e);
+  } catch (err) {
+    console.error("BOOK ERROR:", err);
     res.json({ description: null });
   }
 });
@@ -47,9 +55,8 @@ app.post("/api/summary", async (req, res) => {
   try {
     const { title, author, description, tone, lang, num } = req.body;
 
-    if (!description) {
+    if (!description)
       return res.json({ summary: "설명이 없어요." });
-    }
 
     const prompt = `
 규칙:
@@ -79,10 +86,15 @@ ${description}
 });
 
 // ===============================
-//         HEALTH CHECK
+//     STATIC FRONTEND SERVING
 // ===============================
-app.get("/", (req, res) => {
-  res.send("Server is running.");
+
+// public → backend/public 폴더를 정적 파일로 서빙
+app.use(express.static(path.join(__dirname, "public")));
+
+// 모든 라우트는 index.html 반환 (SPA 방식)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // ===============================
