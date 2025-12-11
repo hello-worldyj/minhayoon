@@ -1,93 +1,72 @@
 import express from "express";
-import cors from "cors";
-import axios from "axios";
+import fetch from "node-fetch";
 import OpenAI from "openai";
 
 const app = express();
-app.use(cors());
 app.use(express.json());
+app.use(express.static("public"));
 
-// === 네 API 키를 여기 넣어 ===
-const client = new OpenAI({
-  apiKey: "YOUR_OPENAI_KEY"
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY  // 🔥 Render 환경변수에서 읽음
 });
 
-// frontend 정적 서비스
-app.use(express.static("../frontend"));
+// 책 설명 API
+app.post("/api/book", async (req, res) => {
+  const { title, author } = req.body;
 
-
-// 📌 Google Books API — 책 설명 가져오기
-app.get("/book", async (req, res) => {
   try {
-    const { title, author } = req.query;
-
     const url = `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(
       title
-    )}+inauthor:${encodeURIComponent(author)}&maxResults=1`;
+    )}+inauthor:${encodeURIComponent(author)}`;
 
-    const { data } = await axios.get(url);
+    const response = await fetch(url);
+    const data = await response.json();
 
     if (!data.items || data.items.length === 0) {
-      return res.json({
-        description: null
-      });
+      return res.json({ description: null });
     }
 
-    const info = data.items[0].volumeInfo;
-    const description = info.description || null;
-
-    res.json({ description });
-  } catch (err) {
-    console.error(err);
+    const desc = data.items[0].volumeInfo.description || null;
+    res.json({ description: desc });
+  } catch {
     res.json({ description: null });
   }
 });
 
+// 요약 생성 API
+app.post("/api/summary", async (req, res) => {
+  const { title, author, description, tone, lang, num } = req.body;
 
-// 📌 요약 생성
-app.post("/summary", async (req, res) => {
+  const safeDesc = description
+    ? description
+    : "설명이 없어서 내용을 생성할 수 없어요.";
+
+  const prompt = `
+규칙:
+1) 설명이 없으면 "설명이 없어요"라고 말하기
+2) 새로운 내용 상상 금지
+3) 문체: ${tone}
+4) 언어: ${lang}
+5) 문장 수: ${num}
+
+책 제목: ${title}
+작가: ${author}
+
+설명:
+${safeDesc}
+`;
+
   try {
-    const { title, author, description, lang, tone, num } = req.body;
-
-    // 설명 없으면 절대 창작 금지
-    if (!description) {
-      return res.json({
-        summary:
-          lang === "en"
-            ? "There is no description available for this book."
-            : "이 책에 대한 설명이 없습니다."
-      });
-    }
-
-    const result = await client.responses.create({
+    const result = await openai.chat.completions.create({
       model: "gpt-4o-mini",
-      input: `
-      Title: ${title}
-      Author: ${author}
-
-      Output language: ${lang}
-      Tone: ${tone}
-      Length: ${num} sentences
-
-      Book Description:
-      ${description}
-
-      RULES:
-      - NEVER invent new story content.
-      - ONLY summarize using given description. The summary must be correct if you can't find one online, just say check spelling.
-      - Output must be ONLY in ${lang}.
-      `
+      messages: [{ role: "user", content: prompt }]
     });
 
-    res.json({
-      summary: result.output_text
-    });
-  } catch (err) {
-    console.error(err);
-    res.json({ summary: "Error generating summary" });
+    res.json({ summary: result.choices[0].message.content });
+  } catch (error) {
+    console.log(error);
+    res.json({ summary: "요약 생성 중 오류가 발생했습니다." });
   }
 });
 
-// 서버 시작
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on ${PORT}`));
+app.listen(10000, () => console.log("Server running on 10000"));
