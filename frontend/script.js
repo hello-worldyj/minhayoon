@@ -1,32 +1,37 @@
 async function generate() {
-  const title = document.getElementById("title").value.trim();
-  const author = document.getElementById("author").value.trim();
-  const lang = document.getElementById("lang").value;
-  const tone = document.getElementById("tone").value;
-  const num = document.getElementById("num").value;
+  const titleVal = title.value.trim();
+  const authorVal = author.value.trim();
+  const langVal = lang.value;
+  const toneVal = tone.value;
+  const numVal = num.value;
 
-  document.getElementById("output").textContent = "불러오는 중...";
+  intro.innerText = "불러오는 중...";
+  summary.innerText = "생성 중...";
 
-  // 책 설명 요청
-  const bookRes = await fetch(`/book?title=${title}&author=${author}`);
-  const bookData = await bookRes.json();
+  // 책 설명
+  const introRes = await fetch("/api/book", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title: titleVal, author: authorVal })
+  });
 
-  const description = bookData.description;
+  const introData = await introRes.json();
+  intro.innerText = introData.description || "설명이 없어요!";
 
-  // 요약 생성 요청
-  const summaryRes = await fetch("/summary", {
+  // 요약
+  const sumRes = await fetch("/api/summary", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      title,
-      author,
-      description,
-      lang,
-      tone,
-      num
+      title: titleVal,
+      author: authorVal,
+      description: introData.description,
+      tone: toneVal,
+      lang: langVal,
+      num: numVal
     })
   });
 
-  const summaryData = await summaryRes.json();
-  document.getElementById("output").textContent = summaryData.summary;
+  const sumData = await sumRes.json();
+  summary.innerText = sumData.summary;
 }
