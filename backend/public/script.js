@@ -1,37 +1,29 @@
-async function generate() {
-  const titleVal = title.value.trim();
-  const authorVal = author.value.trim();
-  const langVal = lang.value;
-  const toneVal = tone.value;
-  const numVal = num.value;
+document.getElementById("generateBtn").addEventListener("click", async () => {
+  const title = document.getElementById("title").value.trim();
+  const author = document.getElementById("author").value.trim();
+  const description = document.getElementById("description").value.trim();
+  const tone = document.getElementById("tone").value;
+  const lang = document.getElementById("lang").value;
+  const num = document.getElementById("num").value;
 
-  intro.innerText = "불러오는 중...";
-  summary.innerText = "생성 중...";
+  const summaryBox = document.getElementById("summary");
+  summaryBox.innerText = "생성 중...";
 
-  // 책 설명
-  const introRes = await fetch("/api/book", {
+  const res = await fetch("/api/summary", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title: titleVal, author: authorVal })
-  });
-
-  const introData = await introRes.json();
-  intro.innerText = introData.description || "설명이 없어요!";
-
-  // 요약
-  const sumRes = await fetch("/api/summary", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify({
-      title: titleVal,
-      author: authorVal,
-      description: introData.description,
-      tone: toneVal,
-      lang: langVal,
-      num: numVal
+      title,
+      author,
+      description,  // ★ 여기가 핵심 (반드시 서버로 전달)
+      tone,
+      lang,
+      num
     })
   });
 
-  const sumData = await sumRes.json();
-  summary.innerText = sumData.summary;
-}
+  const data = await res.json();
+  summaryBox.innerText = data.summary;
+});
