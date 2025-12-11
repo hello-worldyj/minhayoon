@@ -1,28 +1,46 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>책 요약기</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>책 요약 생성기</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="box">
+    <h1>책 요약 생성기</h1>
 
-<div class="container">
-  <h1> 책 요약기</h1>
+    <label>책 제목</label>
+    <input type="text" id="title" />
 
-  <input id="titleInput" type="text" placeholder="책 제목 입력">
+    <label>작가</label>
+    <input type="text" id="author" />
 
-  <button id="generateBtn">요약 생성</button>
+    <label>언어</label>
+    <select id="lang">
+      <option value="한국어">한국어</option>
+      <option value="영어">영어</option>
+    </select>
 
-  <div id="outputBox">
-    <h2> 책 소개</h2>
-    <p id="descriptionText">-</p>
+    <label>톤</label>
+    <select id="tone">
+      <option value="기본 말투">기본 말투</option>
+      <option value="하윤이가 좋아하는 사람에게 말하는 말투"> 착한 말투</option>
+      <option value="하윤이가 친구한테 말하는 말투"> 친한 말투</option>
+    </select>
 
-    <h2> 요약</h2>
-    <p id="summaryText">-</p>
+    <label>요약 문장 수</label>
+    <input type="number" id="num" min="1" value="5" />
+
+    <button onclick="generate()">생성하기</button>
+
+    <h3>책 소개</h3>
+    <pre id="intro"></pre>
+
+    <h3>요약</h3>
+    <pre id="summary"></pre>
   </div>
-</div>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
