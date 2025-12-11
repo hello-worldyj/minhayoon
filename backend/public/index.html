@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>책 요약 생성기</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <div class="container">
-    <h1>📘 책 요약 생성기</h1>
+    <h1> 책 요약 생성기</h1>
 
     <label>책 제목</label>
-    <input id="title" type="text">
+    <input type="text" id="title">
 
     <label>작가</label>
-    <input id="author" type="text">
+    <input type="text" id="author">
 
-    <label>설명</label>
-    <textarea id="description"></textarea>
+    <button onclick="getIntro()">📖 책 설명 불러오기</button>
+
+    <h3>책 설명</h3>
+    <pre id="intro"></pre>
 
     <label>언어</label>
     <select id="lang">
@@ -27,17 +28,17 @@
 
     <label>톤</label>
     <select id="tone">
-      <option>기본</option>
-      <option>따뜻한 톤</option>
-      <option>심플 톤</option>
+      <option>기본 말투</option>
+      <option>따뜻한 말투</option>
+      <option>친근한 말투</option>
     </select>
 
     <label>문장 수</label>
     <input id="num" type="number" value="5">
 
-    <button id="generateBtn">요약 생성</button>
+    <button onclick="generate()"> 요약 생성</button>
 
-    <h2>결과</h2>
+    <h3>요약 결과</h3>
     <pre id="summary"></pre>
   </div>
 
